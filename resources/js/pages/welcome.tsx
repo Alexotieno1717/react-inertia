@@ -7,7 +7,8 @@ import { PuppiesList } from "@/components/PuppiesList";
 import { NewPuppyForm } from "@/components/NewPuppyForm";
 
 import { useState } from "react";
-import { Puppy } from "@/types";
+import { Puppy, SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 
 export default function App({ puppies }: { puppies: Puppy[] }) {
     return (
@@ -26,12 +27,13 @@ function Main({pups}: {pups:Puppy[]}) {
     // const apiPuppies = use(puppyPromise);
     const [searchQuery, setSearchQuery] = useState("");
     const [puppies, setPuppies] = useState<Puppy[]>(pups);
+    const { auth } = usePage<SharedData>( ).props;
 
     return (
         <main>
             <div className="mt-24 grid gap-8 sm:grid-cols90-2">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                <Shortlist puppies={puppies} setPuppies={setPuppies} />
+                {auth.user  && <Shortlist puppies={puppies} setPuppies={setPuppies} />}
             </div>
             <PuppiesList
                 puppies={puppies}
