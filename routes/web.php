@@ -8,7 +8,7 @@ use Laravel\Fortify\Features;
 Route::get('/', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
-        'puppies' => \App\Http\Resources\PuppyResource::collection(Puppy::all()->load('user'))
+        'puppies' => \App\Http\Resources\PuppyResource::collection(Puppy::all()->load(['user', 'likedBy'])),
     ]);
 })->name('home');
 
