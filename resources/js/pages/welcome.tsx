@@ -17,15 +17,18 @@ export default function App({ puppies }: { puppies: Puppy[] }) {
         <PageWrapper>
             <Container>
                 <Header />
+                <pre className="text-black">{JSON.stringify(puppies, null, 2)}</pre>
                 <ul className="flex gap-4 mt-4 flex-wrap">
                     {puppies.map((puppy, index) => (
                         <li className="bg-white text-black p-6 ring ring-black/10 flex gap-2" key={index}>
-                            <img src={puppy.image_url} alt={puppy.name} className="size-24  object-cover" />
-                            <h2>{puppy.name}</h2>
+                            <img src={puppy.imageUrl} alt={puppy.name} className="size-24  object-cover" />
+                            <div>
+                                <h2>{puppy.name}</h2>
+                                <p>{puppy.user.name}</p>
+                            </div>
                         </li>
                     ))}
                 </ul>
-                <pre className="text-black">{JSON.stringify(puppies, null, 2)}</pre>
                 <ErrorBoundary
                     fallbackRender={({ error }) => (
                         <div className="mt-12 bg-red-100 p-6 shadow ring ring-black/5">

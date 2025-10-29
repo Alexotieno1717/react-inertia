@@ -46,6 +46,7 @@ export interface Puppy {
     id: number;
     name: string;
     trait: string;
-    image_url: string;
+    imageUrl: string;
+    user: Pick<User, "id" | "name">
     likedBy: User["id"][];
-};
+}
