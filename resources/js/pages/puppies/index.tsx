@@ -33,7 +33,7 @@ function Main({inertiaPuppies}: {inertiaPuppies:Puppy[]}) {
         <main>
             <div className="mt-24 grid gap-8 sm:grid-cols90-2">
                 <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                {auth.user  && <Shortlist puppies={inertiaPuppies} setPuppies={setPuppies} />}
+                {auth.user  && <Shortlist puppies={inertiaPuppies} />}
             </div>
             <PuppiesList puppies={inertiaPuppies} searchQuery={searchQuery} />
             <NewPuppyForm puppies={inertiaPuppies} setPuppies={setPuppies} />

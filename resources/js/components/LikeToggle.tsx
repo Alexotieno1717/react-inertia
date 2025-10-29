@@ -1,6 +1,6 @@
 import { Heart, LoaderCircle } from "lucide-react";
 import { Puppy, SharedData } from '../types';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
 
 
@@ -10,24 +10,32 @@ export function LikeToggle({
   puppy: Puppy;
 }) {
     const { auth } = usePage<SharedData>( ).props;
-  return (
-    <Link
-        preserveScroll
-      className={clsx('group', !auth.user && 'cursor-not-allowed')}
-      disabled={!auth.user}
-      method="patch"
-      href={route('puppies.like', puppy.id)}
-    >
-    <LoaderCircle className="hidden animate-spin stroke-slate-300 group-data-loading:block" />
-    <Heart
-      className={clsx(
-          auth.user && puppy.likedBy.includes(auth.user.id)
-              ? "fill-pink-500 stroke-none"
-              : "stroke-slate-200 group-hover:stroke-slate-300",
-          "group-data-loading:hidden"
-      )
-      }
-    />
-    </Link>
+    const  { processing, patch } = useForm();
+    return (
+        <form onSubmit={(e) => {
+            e.preventDefault()
+            patch(route('puppies.like', puppy.id), {
+                preserveScroll: true
+            })
+        }}>
+            <button
+                type="submit"
+                className={clsx('group', !auth.user && 'cursor-not-allowed')}
+                disabled={!auth.user || processing}
+            >
+                {processing ? (
+                    <LoaderCircle className="animate-spin stroke-slate-300" />
+                ) : (
+                    <Heart
+                        className={clsx(
+                            auth.user && puppy.likedBy.includes(auth.user.id)
+                                ? "fill-pink-500 stroke-none"
+                                : "stroke-slate-200 group-hover:stroke-slate-300",
+                        )
+                        }
+                    />
+                )}
+            </button>
+        </form>
   );
 }
