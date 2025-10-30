@@ -1,29 +1,18 @@
-import { Dispatch, SetStateAction } from "react";
-import { Puppy } from "../types";
 import { useFormStatus } from "react-dom";
-import { createPuppy } from "../queries";
-import { ErrorBoundary } from "react-error-boundary";
+import { useForm } from '@inertiajs/react';
 
-export function NewPuppyForm({
-  puppies,
-  setPuppies,
-}: {
-  puppies: Puppy[];
-  setPuppies: Dispatch<SetStateAction<Puppy[]>>;
-}) {
+export function NewPuppyForm() {
+    const { post, setData, data } = useForm({
+        name: '',
+        trait: '',
+        image: null as File | null
+    });
   return (
     <div className="mt-12 flex items-center justify-between bg-white p-8 shadow ring ring-black/5">
-      <ErrorBoundary
-        fallbackRender={({ error }) => (
-          <pre>{JSON.stringify(error, null, 2)}</pre>
-        )}
-      >
         <form
-          action={async (formData: FormData) => {
-            const response = await createPuppy(formData);
-            if (response.data) {
-              setPuppies([...puppies, response.data]);
-            }
+          onSubmit={(e) => {
+              e.preventDefault()
+              post(route('puppies.store'));
           }}
           className="mt-4 flex w-full flex-col items-start gap-4"
         >
@@ -32,6 +21,8 @@ export function NewPuppyForm({
               <label htmlFor="name">Name</label>
               <input
                 required
+                value={data.name}
+                onChange={(e) => setData('name', e.target.value)}
                 className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                 id="name"
                 type="text"
@@ -42,6 +33,8 @@ export function NewPuppyForm({
               <label htmlFor="trait">Personality trait</label>
               <input
                 required
+                value={data.trait}
+                onChange={(e) => setData('trait', e.target.value)}
                 className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                 id="trait"
                 type="text"
@@ -49,18 +42,19 @@ export function NewPuppyForm({
               />
             </fieldset>
             <fieldset className="col-span-2 flex w-full flex-col gap-1">
-              <label htmlFor="image_url">Profile pic</label>
+              <label htmlFor="image">Profile pic</label>
               <input
+                required
+                onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
                 className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
-                id="image_url"
+                id="image"
                 type="file"
-                name="image_url"
+                name="image"
               />
             </fieldset>
           </div>
           <SubmitButton />
         </form>
-      </ErrorBoundary>
     </div>
   );
 }
