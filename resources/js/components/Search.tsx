@@ -2,6 +2,7 @@ import { Delete } from "lucide-react";
 import { useRef } from "react";
 import { router } from '@inertiajs/react';
 import { Filters } from '@/types';
+import { debounce } from 'lodash-es';
 
 export function Search({ filters }: {filters:Filters}) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -14,13 +15,13 @@ export function Search({ filters }: {filters:Filters}) {
         <input
           ref={inputRef}
           defaultValue={filters.search}
-          onChange={(e) => {
+          onChange={debounce((e) => {
               router.get(
                   route('home'),
                   { search: e.target.value },
                   { preserveState: true, preserveScroll: true }
               )
-          }}
+          }, 300)}
           placeholder="playful..."
           name="search"
           id="search"
@@ -29,7 +30,18 @@ export function Search({ filters }: {filters:Filters}) {
         />
         <button
           onClick={() => {
-            inputRef.current?.focus();
+              router.get(
+                  route('home'),
+                  {},
+                  {
+                      preserveState: true,
+                      preserveScroll: true,
+                      onSuccess: () => {
+                          inputRef.current!.value = '';
+                          inputRef.current?.focus()
+                      },
+                  }
+              )
           }}
           className="inline-block rounded bg-cyan-300 px-4 py-2 !pr-3 !pl-2.5 font-medium text-cyan-900 hover:bg-cyan-200 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
         >
