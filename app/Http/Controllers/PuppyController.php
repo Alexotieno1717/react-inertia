@@ -21,6 +21,7 @@ class PuppyController extends Controller
                             ->orWhere('trait', 'like', '%'.$search.'%');
                     })
                     ->with(['user', 'likedBy'])
+                    ->latest()
                     ->paginate(9)
                     ->withQueryString()
             ),
@@ -32,6 +33,7 @@ class PuppyController extends Controller
 
     public function store(Request $request)
     {
+        sleep(2);
         $request->validate([
             'name' => 'required|string|max:255',
             'trait' => 'required|string|max:255',
@@ -47,7 +49,16 @@ class PuppyController extends Controller
             $image_url = Storage::url($path);
         }
 
-        dd($image_url);
+        // create new puppy
+        $puppy = $request->user()->puppies()->create([
+            'name' => $request->name,
+            'trait' => $request->trait,
+            'image_url' => $image_url,
+        ]);
+
+        return back()->with(['success' => "Puppy {$puppy->name} created"]);
+
+
     }
 
     public function like(Request $request, Puppy $puppy)
