@@ -2,7 +2,7 @@ import { useFormStatus } from "react-dom";
 import { useForm } from '@inertiajs/react';
 
 export function NewPuppyForm() {
-    const { post, setData, data } = useForm({
+    const { post, setData, data, errors } = useForm({
         name: '',
         trait: '',
         image: null as File | null
@@ -12,7 +12,9 @@ export function NewPuppyForm() {
         <form
           onSubmit={(e) => {
               e.preventDefault()
-              post(route('puppies.store'));
+              post(route('puppies.store'),{
+                  preserveScroll:true
+              });
           }}
           className="mt-4 flex w-full flex-col items-start gap-4"
         >
@@ -20,7 +22,7 @@ export function NewPuppyForm() {
             <fieldset className="flex w-full flex-col gap-1">
               <label htmlFor="name">Name</label>
               <input
-                required
+                // required
                 value={data.name}
                 onChange={(e) => setData('name', e.target.value)}
                 className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
@@ -28,11 +30,12 @@ export function NewPuppyForm() {
                 type="text"
                 name="name"
               />
+                {errors.name && <p className="text-xs mt-1 text-red-500">{errors.name}</p>}
             </fieldset>
             <fieldset className="flex w-full flex-col gap-1">
               <label htmlFor="trait">Personality trait</label>
               <input
-                required
+                // required
                 value={data.trait}
                 onChange={(e) => setData('trait', e.target.value)}
                 className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
@@ -40,17 +43,19 @@ export function NewPuppyForm() {
                 type="text"
                 name="trait"
               />
+                {errors.trait && <p className="text-xs mt-1 text-red-500">{errors.trait}</p>}
             </fieldset>
             <fieldset className="col-span-2 flex w-full flex-col gap-1">
               <label htmlFor="image">Profile pic</label>
               <input
-                required
+                // required
                 onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
                 className="max-w-96 rounded-sm bg-white px-2 py-1 ring ring-black/20 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                 id="image"
                 type="file"
                 name="image"
               />
+                {errors.image && <p className="text-xs mt-1 text-red-500">{errors.image}</p>}
             </fieldset>
           </div>
           <SubmitButton />
