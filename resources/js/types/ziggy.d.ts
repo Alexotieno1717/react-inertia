@@ -3,7 +3,7 @@ declare global {
         name?: string,
         params?: number,
         absolute?: boolean,
-        config?: any,
+        config?: never,
     ): string;
 }
 
