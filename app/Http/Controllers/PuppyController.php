@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\OptimizeImageAction;
 use App\Http\Resources\PuppyResource;
 use App\Models\Puppy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
-use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\ImageManager;
 
 
 class PuppyController extends Controller
@@ -46,22 +45,13 @@ class PuppyController extends Controller
         // store image
         $image_url = null;
         if ($request->hasFile('image')) {
-            // Image optimization
-//            $image =Image::read($request->file('image'));
-            $manager = new ImageManager(new Driver());
-            $image = $manager->read($request->file('image')->getRealPath());
+
+            $optimized = (new OptimizeImageAction())->handle($request->file('image'));
 
 
-            if ($image->width() > 1000){
-                $image->scale(width: 1000);
-            }
+            $path = 'puppies/' . $optimized['fileName'];
 
-            $webpEncoded = $image->toWebp(quality: 95)->toString();
-
-            $fileName = Str::random() . '.webp';
-            $path = 'puppies/' . $fileName;
-
-            $stored =Storage::disk('public')->put($path, $webpEncoded);
+            $stored =Storage::disk('public')->put($path, $optimized['webString']);
 
             if (!$stored) {
                 return back()->withErrors(['image' => 'Failed to upload image']);
