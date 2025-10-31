@@ -2,7 +2,7 @@ import { useFormStatus } from "react-dom";
 import { useForm } from '@inertiajs/react';
 import React, { useRef } from 'react';
 
-export function NewPuppyForm({ mainRef }:{ mainRef?: React.RefObject<HTMLElement>}) {
+export function NewPuppyForm({ mainRef }:{ mainRef?: React.RefObject<HTMLElement | null>}) {
     const { post, setData, data, errors, reset, processing } = useForm({
         name: '',
         trait: '',

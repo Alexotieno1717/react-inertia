@@ -4,6 +4,8 @@ import { useForm, usePage } from '@inertiajs/react';
 
 export function Shortlist({ puppies }: { puppies: Puppy[]}) {
     const { auth } = usePage<SharedData>( ).props;
+    const fivePuppies = puppies.slice(0,5)
+    const extraPuppiesCount = puppies.length - fivePuppies.length
   return (
     <div>
       <h2 className="flex items-center gap-2 font-medium">
@@ -11,9 +13,7 @@ export function Shortlist({ puppies }: { puppies: Puppy[]}) {
         <Heart className="fill-pink-500 stroke-pink-500" />
       </h2>
       <ul className="mt-4 flex flex-wrap gap-4">
-        {puppies
-          .filter((pup) => pup.likedBy.includes(auth.user?.id))
-          .map((puppy) => (
+        {fivePuppies.map((puppy) => (
             <li
               key={puppy.id}
               className="relative flex items-center overflow-clip rounded-md bg-white shadow-sm ring ring-black/5 transition duration-100 starting:scale-0 starting:opacity-0"
@@ -29,6 +29,9 @@ export function Shortlist({ puppies }: { puppies: Puppy[]}) {
               <DeleteButton id={puppy.id} />
             </li>
           ))}
+          {extraPuppiesCount > 0 && (
+              <li className="text-sm text-slate-800 self-center">+ {extraPuppiesCount} More</li>
+          )}
       </ul>
     </div>
   );
