@@ -1,9 +1,8 @@
-import { Puppy, SharedData } from '@/types';
+import { Puppy } from '@/types';
 import { Heart, LoaderCircle, X } from "lucide-react";
-import { useForm, usePage } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 
 export function Shortlist({ puppies }: { puppies: Puppy[]}) {
-    const { auth } = usePage<SharedData>( ).props;
     const fivePuppies = puppies.slice(0,5)
     const extraPuppiesCount = puppies.length - fivePuppies.length
   return (
