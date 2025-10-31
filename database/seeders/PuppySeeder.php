@@ -108,7 +108,8 @@ class PuppySeeder extends Seeder
         $optimizer = new OptimizeImageAction();
 
         foreach ($puppies as $puppy) {
-            $input = storage_path('app/public/puppies/' . $puppy['image']);
+            $input = storage_path('app/public/seed-images/' . $puppy['image']);
+//            $input = base_path('seed_images/' . $puppy['image']);
             $optimized = $optimizer->handle($input);
             $path = 'puppies/' . $optimized['fileName'];
             Storage::disk('public')->put($path, $optimized['webString']);
