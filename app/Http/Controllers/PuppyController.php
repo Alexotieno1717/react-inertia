@@ -67,7 +67,7 @@ class PuppyController extends Controller
             'image_url' => $image_url,
         ]);
 
-        return back()->with(['success' => "Puppy {$puppy->name} created"]);
+        return redirect()->route('home', ['page' => 1])->with(['success' => "Puppy {$puppy->name} created"]);
 
 
     }
