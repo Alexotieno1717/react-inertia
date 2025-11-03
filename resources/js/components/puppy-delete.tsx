@@ -21,8 +21,8 @@ const PuppyDelete = ({ puppy }: {puppy:Puppy}) => {
         <div>
             <AlertDialog>
                 <AlertDialogTrigger>
-                    <Button size="icon" variant="destructive" aria-label="Delete Puppy">
-                        <TrashIcon className="size-4" />
+                    <Button className="group/delete bg-background/30 hover:bg-background" size="icon" variant="secondary" aria-label="Delete Puppy">
+                        <TrashIcon className="size-4 group-hover/delete:stroke-destructive" />
                     </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
