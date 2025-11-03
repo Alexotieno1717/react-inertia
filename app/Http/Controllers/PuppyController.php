@@ -50,9 +50,9 @@ class PuppyController extends Controller
             $optimized = (new OptimizeImageAction())->handle($request->file('image'));
 
 
-            $path = 'puppies/' . $optimized['fileName'];
+            $path = 'puppies/'.$optimized['fileName'];
 
-            $stored =Storage::disk('public')->put($path, $optimized['webString']);
+            $stored = Storage::disk('public')->put($path, $optimized['webString']);
 
             if (!$stored) {
                 return back()->withErrors(['image' => 'Failed to upload image']);
@@ -67,9 +67,22 @@ class PuppyController extends Controller
             'image_url' => $image_url,
         ]);
 
-        return redirect()->route('home', ['page' => 1])->with(['success' => "Puppy {$puppy->name} created successfully"]);
+        return redirect()->route('home',
+            ['page' => 1])->with(['success' => "Puppy {$puppy->name} created successfully"]);
 
 
+    }
+
+    public function destroy(Request $request, Puppy $puppy)
+    {
+        $imagePath = str_replace('/storage/', '', $puppy->image_url);
+
+        $puppy->delete();
+
+        if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
+        return redirect()->route('home', ['page' => 1])->with('success', 'Puppy deleted successfully');
     }
 
     public function like(Request $request, Puppy $puppy)
