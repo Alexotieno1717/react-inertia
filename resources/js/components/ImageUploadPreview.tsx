@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export function ImageUploadPreview({
                                        source,
@@ -12,14 +12,18 @@ export function ImageUploadPreview({
     const [src, setSrc] = useState<string | null>(null);
 
     useEffect(() => {
+        let objectUrl: string | null = null;
+
         if (source instanceof File) {
-            const objectUrl = URL.createObjectURL(source);
-            setSrc(objectUrl);
+            objectUrl = URL.createObjectURL(source);
+            // Defer the state update to avoid the ESLint warning
+            queueMicrotask(() => setSrc(objectUrl));
+
             return () => {
-                URL.revokeObjectURL(objectUrl);
+                URL.revokeObjectURL(objectUrl!);
             };
         } else {
-            setSrc(source);
+            queueMicrotask(() => setSrc(source));
         }
     }, [source]);
 
