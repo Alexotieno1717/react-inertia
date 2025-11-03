@@ -1,5 +1,5 @@
-import { TrashIcon } from 'lucide-react';
-import React from 'react';
+import { LoaderCircle, TrashIcon } from 'lucide-react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Puppy } from '@/types';
 import {
@@ -14,12 +14,14 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useForm } from '@inertiajs/react';
+import { clsx } from 'clsx';
 
 const PuppyDelete = ({ puppy }: {puppy:Puppy}) => {
+    const [open, setOpen] = useState(false)
     const { processing, delete:destroy } = useForm();
     return (
         <div>
-            <AlertDialog>
+            <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogTrigger>
                     <Button className="group/delete bg-background/30 hover:bg-background" size="icon" variant="secondary" aria-label="Delete Puppy">
                         <TrashIcon className="size-4 group-hover/delete:stroke-destructive" />
@@ -40,7 +42,14 @@ const PuppyDelete = ({ puppy }: {puppy:Puppy}) => {
                                     preserveScroll: true
                                 })
                             }}>
-                                <AlertDialogAction type="submit">Delete {puppy.name}</AlertDialogAction>
+                                <Button className="relative disabled:opacity-100" disabled={processing} type="submit">
+                                    {processing && (
+                                        <div className="absolute inset-0 grid place-items-center">
+                                            <LoaderCircle className="size-5 animate-spin stroke-primary-foreground" />
+                                        </div>
+                                    )}
+                                    <span className={clsx(processing && 'invisible')}>Delete {puppy.name}</span>
+                                </Button>
                             </form>
                         </AlertDialogFooter>
                 </AlertDialogContent>
