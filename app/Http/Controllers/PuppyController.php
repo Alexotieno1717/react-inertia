@@ -7,7 +7,6 @@ use App\Http\Resources\PuppyResource;
 use App\Models\Puppy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 
@@ -37,7 +36,6 @@ class PuppyController extends Controller
 
     public function store(Request $request)
     {
-        usleep(2000);
         $request->validate([
             'name' => 'required|string|max:255',
             'trait' => 'required|string|max:255',
@@ -75,7 +73,6 @@ class PuppyController extends Controller
 
     public function destroy(Request $request, Puppy $puppy)
     {
-        sleep(2);
         $imagePath = str_replace('/storage/', '', $puppy->image_url);
 
         if ($request->user()->cannot('delete', $puppy)) {
@@ -138,7 +135,6 @@ class PuppyController extends Controller
 
     public function like(Request $request, Puppy $puppy)
     {
-        sleep(1);
         $puppy->likedBy()->toggle($request->user()->id);
 
         return back();
