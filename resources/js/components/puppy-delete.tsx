@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Puppy } from '@/types';
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
