@@ -122,15 +122,12 @@ class PuppyController extends Controller
         $puppy->name = $request->name;
         $puppy->trait = $request->trait;
 
-
+        // Save the updated puppy
         $puppy->save();
 
+        // Redirect back with success message
         return back()
             ->with('success', 'Puppy updated successfully!');
-
-        // Save the updated puppy
-
-        // Redirect back with success message
     }
 
     public function like(Request $request, Puppy $puppy)
