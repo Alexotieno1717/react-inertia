@@ -12,7 +12,7 @@ class DeleteUnusedPuppyImages extends Command
     protected $signature = 'delete:unused-puppy-images';
     protected $description = 'Cleanup uploaded images that are no longer referenced in the database.';
 
-    public function handle()
+    public function handle(): int
     {
         // get all files under storage/app/public/puppies
         // using the public disk returns paths relative to the disk root, e.g., "puppies/abc.jpg"
